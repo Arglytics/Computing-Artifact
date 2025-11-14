@@ -43,6 +43,29 @@ dfm_obj <- dfm_remove(dfm_obj, c("s", "pm")) # Add more terms as needed
 # Converting DFM to STM input format
 dfm_stm <- convert(dfm_obj, to = "stm")
 
+names(dfm_stm)
+
+
+
+# Run searchK on your data
+K_vals <- seq(2, 10, by = 2)
+
+k_search <- searchK(
+  documents = dfm_stm$documents,
+  vocab = dfm_stm$vocab,
+  K = K_vals,
+  heldout.seed = 34,
+  seed = 34,
+  M = 10,
+  init.type = "Spectral",
+  cores = 6
+)
+
+# Plot results to select best K
+plot(k_search)
+
+#using K = 8
+
 # Fit STM model
 model <- stm(
   documents = dfm_stm$documents,
